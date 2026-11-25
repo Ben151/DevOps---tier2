@@ -1,47 +1,53 @@
-# BONUS: build and push the images to GitHub Container Registry (ghcr.io)
-# Runs on push to main, and on version tags like v1.2.0
-name: Publish to GHCR
+# בונוס: בניית האימג'ים ודחיפתם ל-GitHub Container Registry (ghcr.io)
+# רץ בכל push ל-main, ובכל תגית גרסה כמו v1.2.0
+name: Publish to GHCR                        # שם ה-workflow בלשונית Actions
 
-on:
-  push:
-    branches: [main]
-    tags: ["v*.*.*"]
-  workflow_dispatch:          # allow manual run from the Actions tab
+on:                                          # מתי ה-workflow רץ
+  push:                                      # בכל push...
+    branches: [main]                         # ...ל-branch הראשי main
+    tags: ["v*.*.*"]                         # ...או של תגית בפורמט גרסה (v1.2.0)
+  workflow_dispatch:          # מאפשר הרצה ידנית מלשונית Actions
 
-permissions:
-  contents: read
-  packages: write             # needed so GITHUB_TOKEN can push to ghcr.io
+permissions:                                 # ההרשאות של ה-GITHUB_TOKEN בריצה הזו
+  contents: read                             # קריאה בלבד לקוד
+  packages: write             # נדרש כדי שה-GITHUB_TOKEN יוכל לדחוף ל-ghcr.io
 
-jobs:
-  publish:
-    name: Publish ${{ matrix.service }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [api, web]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+jobs:                                        # רשימת המשימות
+  publish:                                   # משימת הפרסום
+    name: Publish ${{ matrix.service }}      # שם המשימה לפי השירות
+    runs-on: ubuntu-latest                   # רץ על מכונת Ubuntu של GitHub
+    strategy:                                # אסטרטגיית הרצה
+      matrix:                                # מריצים את המשימה פעם לכל שירות
+        service: [api, web]                  # api ו-web
+    steps:                                   # השלבים
+      - name: Checkout code                  # שלב: הורדת הקוד
+        uses: actions/checkout@v4            # action רשמי להורדת הקוד
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx           # שלב: הכנת Buildx
+        uses: docker/setup-buildx-action@v3  # action רשמי להתקנת Buildx
 
-      # 1. secure login - GITHUB_TOKEN is created automatically for every run, no password in the repo
-      - name: Log in to ghcr.io
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      # 1. התחברות מאובטחת - GITHUB_TOKEN נוצר אוטומטית בכל ריצה, אין סיסמה בתוך ה-repo
+      - name: Log in to ghcr.io              # שלב: התחברות ל-registry
+        uses: docker/login-action@v3         # action רשמי של Docker להתחברות
+        with:                                # פרמטרים
+          registry: ghcr.io                  # כתובת ה-registry של GitHub
+          username: ${{ github.actor }}      # שם המשתמש שהפעיל את הריצה
+          password: ${{ secrets.GITHUB_TOKEN }}   # הטוקן הזמני שנוצר אוטומטית
 
-      # 2. automatic tagging (metadata-action also converts the name to lowercase)
-      #    push to main -> latest, 1.0.<run number>, sha-xxxxxxx
+      # 2. תיוג אוטומטי (metadata-action גם ממיר את השם לאותיות קטנות)
+      #    push ל-main  -> latest, 1.0.<מספר ריצה>, sha-xxxxxxx
       #    git tag v1.2.0 -> 1.2.0, 1.2
-      - name: Generate image tags
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}-${{ matrix.service }}
+      #    שורות ה-tags למטה, לפי הסדר:
+      #      raw latest   -> התגית latest, רק ב-branch הראשי
+      #      raw 1.0.N    -> גרסה 1.0.<מספר הריצה>, רק ב-branch הראשי
+      #      semver full  -> הגרסה המלאה מתוך תגית git (1.2.0)
+      #      semver major.minor -> רק major.minor (1.2)
+      #      sha short    -> תגית לפי ה-commit המקוצר (sha-xxxxxxx)
+      - name: Generate image tags            # שלב: יצירת רשימת התגיות
+        id: meta                             # מזהה לשלב - כדי לקרוא את הפלט שלו בהמשך
+        uses: docker/metadata-action@v5      # action רשמי שמחשב תגיות ו-labels
+        with:                                # פרמטרים
+          images: ghcr.io/${{ github.repository }}-${{ matrix.service }}   # שם האימג' המלא ב-registry
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=1.0.${{ github.run_number }},enable={{is_default_branch}}
@@ -49,13 +55,13 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha,format=short
 
-      # 3. build + push
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: ./${{ matrix.service }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ matrix.service }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+      # 3. בנייה + דחיפה
+      - name: Build and push                 # שלב: בנייה ודחיפה ל-registry
+        uses: docker/build-push-action@v6    # action רשמי לבנייה ודחיפה
+        with:                                # פרמטרים
+          context: ./${{ matrix.service }}   # תיקיית הבנייה לפי השירות
+          push: true                         # הפעם כן דוחפים ל-ghcr.io
+          tags: ${{ steps.meta.outputs.tags }}       # התגיות שחושבו בשלב meta
+          labels: ${{ steps.meta.outputs.labels }}   # ה-labels (מקור, גרסה וכו') שחושבו בשלב meta
+          cache-from: type=gha,scope=${{ matrix.service }}          # קריאת שכבות מה-cache
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}   # שמירת השכבות ל-cache

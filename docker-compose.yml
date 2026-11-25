@@ -1,57 +1,57 @@
-# Smart Parking - microservices environment
-#   web   -> Nginx: dashboard (HTML/CSS/JS) + reverse proxy to the API  (the only port open to the host)
-#   api   -> Node.js + Express: POST from the camera, GET for the dashboard
-#   redis -> database, persisted to a named volume (AOF file)
+# Smart Parking - סביבת מיקרו-שירותים
+#   web   -> Nginx: לוח הבקרה (HTML/CSS/JS) + reverse proxy ל-API  (הפורט היחיד שפתוח למחשב המארח)
+#   api   -> Node.js + Express: מקבל POST מהמצלמה ו-GET מלוח הבקרה
+#   redis -> מסד הנתונים, נשמר ב-volume בעל שם (קובץ AOF)
 
-services:
-  redis:
-    image: redis:7-alpine
-    container_name: parking-redis
-    # --appendonly yes       -> every write is appended to a file (AOF) inside /data
-    # --appendfsync everysec -> flush the file to disk every second
-    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
-    volumes:
-      - redis-data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-    networks: [backend]
+services:                                    # רשימת השירותים (קונטיינרים) בסביבה
+  redis:                                     # שירות מסד הנתונים
+    image: redis:7-alpine                    # אימג' רשמי של Redis גרסה 7 על Alpine
+    container_name: parking-redis            # שם קבוע לקונטיינר (במקום שם אוטומטי)
+    # --appendonly yes       -> כל כתיבה נוספת לסוף קובץ (AOF) בתוך /data
+    # --appendfsync everysec -> הקובץ נכתב לדיסק פעם בשנייה
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]   # פקודת ההפעלה של Redis עם שמירה לדיסק
+    volumes:                                 # חיבור אחסון קבוע לקונטיינר
+      - redis-data:/data                     # ה-volume בשם redis-data ממופה לתיקייה /data שבה Redis שומר
+    healthcheck:                             # בדיקת בריאות לקונטיינר
+      test: ["CMD", "redis-cli", "ping"]     # שולחים PING ל-Redis; תשובת PONG = בריא
+      interval: 5s                           # בודקים כל 5 שניות
+      timeout: 3s                            # מחכים עד 3 שניות לתשובה
+      retries: 5                             # 5 כישלונות ברצף = unhealthy
+    restart: unless-stopped                  # אם הקונטיינר נופל - מפעילים אותו מחדש (אלא אם עצרנו ידנית)
+    networks: [backend]                      # מחובר רק לרשת ה-backend (ה-web לא יכול להגיע אליו)
 
-  api:
-    build: ./api
-    image: smart-parking-api:local
-    container_name: parking-api
-    environment:
-      PORT: 3000
-      REDIS_URL: redis://redis:6379          # "redis" = service name -> Docker internal DNS
-      PARKING_CAPACITY: ${PARKING_CAPACITY:-10}
-      PRICE_FIRST_HOUR: ${PRICE_FIRST_HOUR:-12}
-      PRICE_EXTRA_HOUR: ${PRICE_EXTRA_HOUR:-8}
-      FREE_MINUTES: ${FREE_MINUTES:-15}
-    depends_on:
-      redis:
-        condition: service_healthy           # wait until redis answers PING
-    restart: unless-stopped
-    networks: [backend, frontend]
+  api:                                       # שירות ה-API
+    build: ./api                             # בונים את האימג' מה-Dockerfile שבתיקייה api
+    image: smart-parking-api:local           # השם והתגית שיינתנו לאימג' שנבנה
+    container_name: parking-api              # שם קבוע לקונטיינר
+    environment:                             # משתני סביבה שהשרת קורא
+      PORT: 3000                             # הפורט שהשרת מאזין לו בתוך הקונטיינר
+      REDIS_URL: redis://redis:6379          # "redis" = שם השירות -> ה-DNS הפנימי של Docker מתרגם אותו
+      PARKING_CAPACITY: ${PARKING_CAPACITY:-10}   # קיבולת החניון - מקובץ .env, ברירת מחדל 10
+      PRICE_FIRST_HOUR: ${PRICE_FIRST_HOUR:-12}   # מחיר שעה ראשונה - ברירת מחדל 12
+      PRICE_EXTRA_HOUR: ${PRICE_EXTRA_HOUR:-8}    # מחיר כל שעה נוספת - ברירת מחדל 8
+      FREE_MINUTES: ${FREE_MINUTES:-15}           # דקות חינם - ברירת מחדל 15
+    depends_on:                              # תלות בשירותים אחרים
+      redis:                                 # תלוי בשירות redis
+        condition: service_healthy           # מחכים עד ש-Redis עונה ל-PING (healthy) לפני שמפעילים את ה-API
+    restart: unless-stopped                  # הפעלה מחדש אוטומטית אם נפל
+    networks: [backend, frontend]            # מחובר לשתי הרשתות - מגשר בין ה-web ל-redis
 
-  web:
-    build: ./web
-    image: smart-parking-web:local
-    container_name: parking-web
-    ports:
-      - "${WEB_PORT:-8080}:80"
-    depends_on:
-      api:
-        condition: service_healthy
-    restart: unless-stopped
-    networks: [frontend]
+  web:                                       # שירות לוח הבקרה (Nginx)
+    build: ./web                             # בונים את האימג' מה-Dockerfile שבתיקייה web
+    image: smart-parking-web:local           # השם והתגית של האימג' שנבנה
+    container_name: parking-web              # שם קבוע לקונטיינר
+    ports:                                   # מיפוי פורטים למחשב המארח
+      - "${WEB_PORT:-8080}:80"               # פורט WEB_PORT במחשב (ברירת מחדל 8080) -> פורט 80 בקונטיינר
+    depends_on:                              # תלות בשירותים אחרים
+      api:                                   # תלוי בשירות api
+        condition: service_healthy           # מחכים שה-API יהיה healthy לפני שמפעילים את ה-web
+    restart: unless-stopped                  # הפעלה מחדש אוטומטית אם נפל
+    networks: [frontend]                     # מחובר רק לרשת ה-frontend
 
-volumes:
-  redis-data:        # named volume - survives "docker compose down" (but not "down -v")
+volumes:                                     # הגדרת ה-volumes
+  redis-data:        # volume בעל שם - שורד "docker compose down" (אבל לא "down -v")
 
-networks:
+networks:                                    # הגדרת הרשתות
   frontend:          # web <-> api
-  backend:           # api <-> redis (web cannot reach redis directly)
+  backend:           # api <-> redis (ה-web לא יכול להגיע ל-redis ישירות)

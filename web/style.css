@@ -1,154 +1,154 @@
-:root {
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --text: #1d2433;
-  --muted: #6b7385;
-  --accent: #3d5afe;
-  --ok: #2ecc71;
-  --warn: #f39c12;
-  --danger: #e74c3c;
-  --plate: #ffd400;
-}
+:root { /* משתני CSS גלובליים (צבעי ערכת העיצוב הרגילה) */
+  --bg: #f4f6fb; /* רקע הדף - אפור-תכלת בהיר */
+  --card: #ffffff; /* רקע הכרטיסים - לבן */
+  --text: #1d2433; /* צבע הטקסט הראשי - כהה */
+  --muted: #6b7385; /* צבע טקסט משני - אפור */
+  --accent: #3d5afe; /* צבע הדגשה (כפתורים) - כחול */
+  --ok: #2ecc71; /* ירוק - תפוסה תקינה */
+  --warn: #f39c12; /* כתום - אזהרה */
+  --danger: #e74c3c; /* אדום - מלא / סכנה */
+  --plate: #ffd400; /* צהוב - צבע לוחית רישוי ישראלית */
+} /* סוף המשתנים */
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; } /* רוחב/גובה כוללים את ה-padding וה-border - קל יותר לחשב גדלים */
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: background .3s, color .3s;
-}
+body { /* עיצוב גוף הדף */
+  margin: 0; /* מבטלים את השוליים של הדפדפן */
+  font-family: "Segoe UI", Arial, sans-serif; /* גופן ראשי, ואם אין - גופני גיבוי */
+  background: var(--bg); /* רקע מהמשתנה */
+  color: var(--text); /* צבע טקסט מהמשתנה */
+  transition: background .3s, color .3s; /* מעבר חלק בהחלפת מצב חלל/רגיל */
+} /* סוף body */
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  background: var(--card);
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
-}
-.topbar h1 { margin: 0; font-size: 1.5rem; }
+.topbar { /* הפס העליון */
+  display: flex; /* סידור הילדים בשורה */
+  align-items: center; /* מרכוז אנכי */
+  justify-content: space-between; /* כותרת בצד אחד, כפתורים בצד השני */
+  gap: 1rem; /* רווח בין האלמנטים */
+  padding: 1rem 2rem; /* ריפוד פנימי: למעלה/למטה 1rem, צדדים 2rem */
+  background: var(--card); /* רקע כמו כרטיס */
+  box-shadow: 0 2px 8px rgba(0,0,0,.06); /* צל עדין מתחת */
+} /* סוף topbar */
+.topbar h1 { margin: 0; font-size: 1.5rem; } /* הכותרת בלי שוליים ובגודל בינוני */
 
-.conn { font-size: .9rem; color: var(--muted); }
-.conn.err { color: var(--danger); }
+.conn { font-size: .9rem; color: var(--muted); } /* סטטוס החיבור - טקסט קטן ואפור */
+.conn.err { color: var(--danger); } /* כשאין חיבור - אדום */
 
-main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; } /* התוכן הראשי: רוחב מקסימלי, ממורכז, עם ריפוד */
 
-.full-alert {
-  background: var(--danger);
-  color: #fff;
-  text-align: center;
-  padding: .8rem;
-  font-weight: bold;
-  font-size: 1.1rem;
-  animation: pulse 1s infinite alternate;
-}
-@keyframes pulse { from { opacity: 1; } to { opacity: .65; } }
+.full-alert { /* התראת "החניון מלא" */
+  background: var(--danger); /* רקע אדום */
+  color: #fff; /* טקסט לבן */
+  text-align: center; /* טקסט ממורכז */
+  padding: .8rem; /* ריפוד פנימי */
+  font-weight: bold; /* טקסט מודגש */
+  font-size: 1.1rem; /* קצת יותר גדול */
+  animation: pulse 1s infinite alternate; /* הבהוב: קדימה ואחורה כל שנייה, לנצח */
+} /* סוף full-alert */
+@keyframes pulse { from { opacity: 1; } to { opacity: .65; } } /* ההבהוב: משקיפות מלאה לחצי-שקיפות */
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
-.stat {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
-}
-.stat .label { color: var(--muted); font-size: .9rem; }
-.stat .value { font-size: 2rem; font-weight: bold; }
+.stats { /* אזור כרטיסי הסטטיסטיקה */
+  display: grid; /* פריסת רשת */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* כמה עמודות שנכנסות, כל אחת לפחות 180px */
+  gap: 1rem; /* רווח בין הכרטיסים */
+} /* סוף stats */
+.stat { /* כרטיס סטטיסטיקה בודד */
+  background: var(--card); /* רקע לבן */
+  border-radius: 12px; /* פינות מעוגלות */
+  padding: 1rem; /* ריפוד פנימי */
+  display: flex; /* flexbox */
+  flex-direction: column; /* התווית מעל הערך */
+  box-shadow: 0 2px 8px rgba(0,0,0,.05); /* צל עדין */
+} /* סוף stat */
+.stat .label { color: var(--muted); font-size: .9rem; } /* התווית - קטנה ואפורה */
+.stat .value { font-size: 2rem; font-weight: bold; } /* הערך - גדול ומודגש */
 
-.capacity {
-  margin-top: 1rem;
-  height: 14px;
-  background: rgba(0,0,0,.08);
-  border-radius: 7px;
-  overflow: hidden;
-}
-.capacity-bar { height: 100%; width: 0; transition: width .5s; }
-.capacity-bar.ok { background: var(--ok); }
-.capacity-bar.warn { background: var(--warn); }
-.capacity-bar.full { background: var(--danger); }
+.capacity { /* המסגרת של פס התפוסה */
+  margin-top: 1rem; /* רווח מעל */
+  height: 14px; /* גובה הפס */
+  background: rgba(0,0,0,.08); /* רקע אפור שקוף (החלק הריק) */
+  border-radius: 7px; /* קצוות מעוגלים לגמרי */
+  overflow: hidden; /* הפס הפנימי לא יחרוג מהפינות המעוגלות */
+} /* סוף capacity */
+.capacity-bar { height: 100%; width: 0; transition: width .5s; } /* הפס הצבעוני: מתחיל ברוחב 0 ומשתנה בצורה חלקה */
+.capacity-bar.ok { background: var(--ok); } /* ירוק - תפוסה נמוכה */
+.capacity-bar.warn { background: var(--warn); } /* כתום - מעל 70% */
+.capacity-bar.full { background: var(--danger); } /* אדום - מלא */
 
-.pricing { color: var(--muted); font-size: .9rem; }
+.pricing { color: var(--muted); font-size: .9rem; } /* שורת התמחור - קטנה ואפורה */
 
-.manual-form { display: flex; gap: .5rem; margin: 1rem 0; }
-.manual-form input {
-  flex: 1;
-  padding: .7rem;
-  border: 1px solid #ccd;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: var(--card);
-  color: var(--text);
-}
+.manual-form { display: flex; gap: .5rem; margin: 1rem 0; } /* הטופס: שדה וכפתור בשורה אחת */
+.manual-form input { /* שדה מספר הרישוי */
+  flex: 1; /* תופס את כל המקום שנשאר בשורה */
+  padding: .7rem; /* ריפוד פנימי */
+  border: 1px solid #ccd; /* מסגרת אפורה דקה */
+  border-radius: 8px; /* פינות מעוגלות */
+  font-size: 1rem; /* גודל טקסט */
+  background: var(--card); /* רקע כמו כרטיס (מתאים גם למצב חלל) */
+  color: var(--text); /* צבע הטקסט מהמשתנה */
+} /* סוף input */
 
-button {
-  padding: .7rem 1rem;
-  border: none;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-size: .95rem;
-  cursor: pointer;
-}
-button:hover { filter: brightness(1.1); }
+button { /* עיצוב כללי לכל הכפתורים */
+  padding: .7rem 1rem; /* ריפוד פנימי */
+  border: none; /* בלי מסגרת */
+  border-radius: 8px; /* פינות מעוגלות */
+  background: var(--accent); /* רקע כחול */
+  color: #fff; /* טקסט לבן */
+  font-size: .95rem; /* גודל טקסט */
+  cursor: pointer; /* סמן "יד" במעבר עכבר */
+} /* סוף button */
+button:hover { filter: brightness(1.1); } /* במעבר עכבר - הכפתור מתבהר קצת */
 
-.cars {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1rem;
-}
-.car {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
-  display: flex;
-  flex-direction: column;
-  gap: .4rem;
-}
-.car.new { animation: slide-in .4s ease-out; }
-@keyframes slide-in { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.cars { /* אזור כרטיסי הרכבים */
+  display: grid; /* פריסת רשת */
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); /* כמה עמודות שנכנסות, כל אחת לפחות 230px */
+  gap: 1rem; /* רווח בין הכרטיסים */
+} /* סוף cars */
+.car { /* כרטיס רכב בודד */
+  background: var(--card); /* רקע לבן */
+  border-radius: 12px; /* פינות מעוגלות */
+  padding: 1rem; /* ריפוד פנימי */
+  box-shadow: 0 2px 8px rgba(0,0,0,.05); /* צל עדין */
+  display: flex; /* flexbox */
+  flex-direction: column; /* האלמנטים אחד מתחת לשני */
+  gap: .4rem; /* רווח קטן ביניהם */
+} /* סוף car */
+.car.new { animation: slide-in .4s ease-out; } /* רכב חדש - מחליק פנימה */
+@keyframes slide-in { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } } /* מתחיל 10px למטה ושקוף, מגיע למקום וגלוי */
 
-.plate {
-  background: var(--plate);
-  color: #000;
-  font-family: monospace;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  border: 3px solid #000;
-  border-radius: 6px;
-  padding: .2rem;
-  direction: ltr;
-}
-.meta { color: var(--muted); font-size: .9rem; }
-.price { font-weight: bold; }
-.exit-btn { background: var(--danger); }
+.plate { /* לוחית הרישוי */
+  background: var(--plate); /* רקע צהוב */
+  color: #000; /* טקסט שחור */
+  font-family: monospace; /* גופן ברוחב קבוע - כמו בלוחית אמיתית */
+  font-size: 1.5rem; /* טקסט גדול */
+  font-weight: bold; /* מודגש */
+  text-align: center; /* ממורכז */
+  border: 3px solid #000; /* מסגרת שחורה עבה */
+  border-radius: 6px; /* פינות מעוגלות קלות */
+  padding: .2rem; /* ריפוד קטן */
+  direction: ltr; /* המספר נכתב משמאל לימין גם בדף RTL */
+} /* סוף plate */
+.meta { color: var(--muted); font-size: .9rem; } /* שעת כניסה ומשך - קטן ואפור */
+.price { font-weight: bold; } /* המחיר - מודגש */
+.exit-btn { background: var(--danger); } /* כפתור השחרור - אדום */
 
-.empty { color: var(--muted); }
+.empty { color: var(--muted); } /* הודעת "החניון ריק" - אפורה */
 
-.history { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; }
-.history th, .history td { padding: .6rem; text-align: right; border-bottom: 1px solid rgba(0,0,0,.06); }
-.history td:first-child { direction: ltr; text-align: right; font-family: monospace; }
+.history { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; } /* טבלת ההיסטוריה: רוחב מלא, גבולות מאוחדים, רקע לבן, פינות מעוגלות */
+.history th, .history td { padding: .6rem; text-align: right; border-bottom: 1px solid rgba(0,0,0,.06); } /* תאים: ריפוד, יישור לימין, קו דק מתחת */
+.history td:first-child { direction: ltr; text-align: right; font-family: monospace; } /* עמודת הרישוי: משמאל לימין, גופן ברוחב קבוע */
 
-.toast {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #222;
-  color: #fff;
-  padding: .8rem 1.4rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
-  z-index: 10;
-}
+.toast { /* ההודעה הקופצת */
+  position: fixed; /* קבועה ביחס למסך */
+  bottom: 1.5rem; /* קרוב לתחתית */
+  left: 50%; /* מתחילה מאמצע המסך */
+  transform: translateX(-50%); /* מוזזת חצי מרוחבה שמאלה = ממורכזת בדיוק */
+  background: #222; /* רקע כהה */
+  color: #fff; /* טקסט לבן */
+  padding: .8rem 1.4rem; /* ריפוד פנימי */
+  border-radius: 10px; /* פינות מעוגלות */
+  box-shadow: 0 4px 14px rgba(0,0,0,.25); /* צל בולט */
+  z-index: 10; /* מעל התוכן הרגיל */
+} /* סוף toast */
 
-.hidden { display: none !important; }
+.hidden { display: none !important; } /* מחלקת עזר: מסתירה כל אלמנט (important גובר על כל כלל אחר) */

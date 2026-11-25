@@ -1,58 +1,58 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Parking - לוח בקרה</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="fun.css">
-</head>
-<body>
-  <header class="topbar">
-    <h1 id="title">🅿️ Smart Parking</h1>
-    <div class="top-actions">
-      <button id="theme-btn" class="theme-btn" title="מצב חלל / מצב רגיל">🌌 מצב חלל</button>
-      <span id="conn" class="conn">מתחבר...</span>
-    </div>
-  </header>
+<!DOCTYPE html> <!-- מודיע לדפדפן שזה מסמך HTML5 -->
+<html lang="he" dir="rtl"> <!-- שפת הדף עברית, כיוון כתיבה מימין לשמאל -->
+<head> <!-- ראש המסמך: הגדרות שלא מוצגות ישירות -->
+  <meta charset="UTF-8"> <!-- קידוד תווים UTF-8 (תומך בעברית ובאימוג'י) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- התאמה למסכי טלפון -->
+  <title>Smart Parking - לוח בקרה</title> <!-- הכותרת שמופיעה בלשונית הדפדפן -->
+  <link rel="stylesheet" href="style.css"> <!-- קובץ העיצוב הראשי -->
+  <link rel="stylesheet" href="fun.css"> <!-- קובץ העיצוב של מצב החלל וביצת הפסחא -->
+</head> <!-- סוף ראש המסמך -->
+<body> <!-- גוף הדף: כל מה שמוצג -->
+  <header class="topbar"> <!-- הפס העליון -->
+    <h1 id="title">🅿️ Smart Parking</h1> <!-- כותרת ראשית (fun.js משנה אותה במצב חלל) -->
+    <div class="top-actions"> <!-- קבוצת הפעולות בצד הפס -->
+      <button id="theme-btn" class="theme-btn" title="מצב חלל / מצב רגיל">🌌 מצב חלל</button> <!-- כפתור החלפת מצב -->
+      <span id="conn" class="conn">מתחבר...</span> <!-- סטטוס החיבור ל-API (app.js מעדכן) -->
+    </div> <!-- סוף קבוצת הפעולות -->
+  </header> <!-- סוף הפס העליון -->
 
-  <!-- shown only when the parking is full -->
-  <div id="full-alert" class="full-alert hidden">⚠️ החניון מלא! אין כניסה לרכבים נוספים</div>
+  <!-- מוצג רק כשהחניון מלא -->
+  <div id="full-alert" class="full-alert hidden">⚠️ החניון מלא! אין כניסה לרכבים נוספים</div> <!-- התראת חניון מלא, מוסתרת כברירת מחדל -->
 
-  <main>
-    <section class="stats">
-      <div class="stat"><span class="label">רכבים בחניון</span><span id="s-occupied" class="value">-</span></div>
-      <div class="stat"><span class="label">מקומות פנויים</span><span id="s-free" class="value">-</span></div>
-      <div class="stat"><span class="label">כניסות סה"כ</span><span id="s-entries" class="value">-</span></div>
-      <div class="stat"><span class="label">הכנסות (₪)</span><span id="s-revenue" class="value">-</span></div>
-    </section>
+  <main> <!-- התוכן הראשי של הדף -->
+    <section class="stats"> <!-- כרטיסי הסטטיסטיקה -->
+      <div class="stat"><span class="label">רכבים בחניון</span><span id="s-occupied" class="value">-</span></div> <!-- תפוסה -->
+      <div class="stat"><span class="label">מקומות פנויים</span><span id="s-free" class="value">-</span></div> <!-- פנויים -->
+      <div class="stat"><span class="label">כניסות סה"כ</span><span id="s-entries" class="value">-</span></div> <!-- סה"כ כניסות -->
+      <div class="stat"><span class="label">הכנסות (₪)</span><span id="s-revenue" class="value">-</span></div> <!-- הכנסות -->
+    </section> <!-- סוף כרטיסי הסטטיסטיקה -->
 
-    <div class="capacity">
-      <div id="capacity-bar" class="capacity-bar"></div>
-    </div>
-    <p id="pricing" class="pricing"></p>
+    <div class="capacity"> <!-- המסגרת של פס התפוסה -->
+      <div id="capacity-bar" class="capacity-bar"></div> <!-- הפס הצבעוני עצמו (רוחבו = אחוז התפוסה) -->
+    </div> <!-- סוף פס התפוסה -->
+    <p id="pricing" class="pricing"></p> <!-- שורת התמחור (app.js ממלא) -->
 
-    <!-- manual entry = simulates the IoT camera POST request -->
-    <form id="manual-form" class="manual-form">
-      <input id="plate-input" placeholder="מספר רישוי, לדוגמה 12-345-67" autocomplete="off">
-      <button type="submit">📷 סימולציית מצלמה</button>
-    </form>
+    <!-- כניסה ידנית = מדמה את בקשת ה-POST של מצלמת ה-IoT -->
+    <form id="manual-form" class="manual-form"> <!-- טופס הכניסה הידנית -->
+      <input id="plate-input" placeholder="מספר רישוי, לדוגמה 12-345-67" autocomplete="off"> <!-- שדה מספר הרישוי, בלי השלמה אוטומטית -->
+      <button type="submit">📷 סימולציית מצלמה</button> <!-- כפתור שליחת הטופס -->
+    </form> <!-- סוף הטופס -->
 
-    <h2>רכבים בחניון</h2>
-    <div id="cars" class="cars"></div>
+    <h2>רכבים בחניון</h2> <!-- כותרת אזור הרכבים -->
+    <div id="cars" class="cars"></div> <!-- המיכל שאליו app.js מוסיף כרטיסי רכבים -->
 
-    <h2>יצאו לאחרונה</h2>
-    <table class="history">
-      <thead><tr><th>רישוי</th><th>זמן חניה</th><th>שולם</th><th>שעת יציאה</th></tr></thead>
-      <tbody id="history"></tbody>
-    </table>
-  </main>
+    <h2>יצאו לאחרונה</h2> <!-- כותרת אזור ההיסטוריה -->
+    <table class="history"> <!-- טבלת ההיסטוריה -->
+      <thead><tr><th>רישוי</th><th>זמן חניה</th><th>שולם</th><th>שעת יציאה</th></tr></thead> <!-- שורת הכותרות של הטבלה -->
+      <tbody id="history"></tbody> <!-- גוף הטבלה (app.js ממלא שורות) -->
+    </table> <!-- סוף הטבלה -->
+  </main> <!-- סוף התוכן הראשי -->
 
-  <div id="toast" class="toast hidden"></div>
+  <div id="toast" class="toast hidden"></div> <!-- הודעה קופצת בתחתית המסך, מוסתרת כברירת מחדל -->
 
-  <!-- personal touch: space theme, funny messages, easter egg -->
-  <div id="hyperspace" class="hyperspace hidden"></div>
-  <script src="app.js"></script>
-  <script src="fun.js"></script>
-</body>
-</html>
+  <!-- נגיעה אישית: מצב חלל, הודעות מצחיקות, ביצת פסחא -->
+  <div id="hyperspace" class="hyperspace hidden"></div> <!-- שכבת אנימציית ההיפר-חלל, מוסתרת -->
+  <script src="app.js"></script> <!-- הלוגיקה הראשית של לוח הבקרה -->
+  <script src="fun.js"></script> <!-- הנגיעה האישית (נטען אחרי app.js כי משתמש ב-showToast) -->
+</body> <!-- סוף גוף הדף -->
+</html> <!-- סוף המסמך -->

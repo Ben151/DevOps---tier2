@@ -1,53 +1,53 @@
-/* ===== Personal touch: Galactic Parking theme ===== */
+/* ===== נגיעה אישית: עיצוב Galactic Parking ===== */
 
-.top-actions { display: flex; align-items: center; gap: 1rem; }
-.theme-btn { background: #222a44; }
+.top-actions { display: flex; align-items: center; gap: 1rem; } /* הכפתור והסטטוס בשורה אחת, ממורכזים אנכית, עם רווח ביניהם */
+.theme-btn { background: #222a44; } /* צבע רקע כחול-כהה לכפתור מצב החלל */
 
-/* ---- space mode (dark) ---- */
-body.space {
-  --bg: #070b1d;
-  --card: #121a36;
-  --text: #e6ebff;
-  --muted: #8f9bc7;
-  --accent: #7c4dff;
-  --plate: #00e5ff;
-  background-color: var(--bg);
-  /* tiny stars made only with CSS gradients */
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-    radial-gradient(1px 1px at 70% 80%, #fff, transparent),
-    radial-gradient(2px 2px at 40% 60%, #b3c7ff, transparent),
-    radial-gradient(1px 1px at 85% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 10% 90%, #fff, transparent);
-  background-size: 300px 300px;
-  animation: stars 60s linear infinite;
-}
-@keyframes stars { to { background-position: -300px 300px; } }
+/* ---- מצב חלל (כהה) ---- */
+body.space { /* חל כשל-body יש את המחלקה space */
+  --bg: #070b1d; /* רקע כמעט שחור-כחול */
+  --card: #121a36; /* רקע הכרטיסים - כחול כהה */
+  --text: #e6ebff; /* טקסט בהיר */
+  --muted: #8f9bc7; /* טקסט משני - אפור-כחלחל */
+  --accent: #7c4dff; /* צבע הדגשה סגול */
+  --plate: #00e5ff; /* לוחית הרישוי בטורקיז זוהר */
+  background-color: var(--bg); /* צבע הרקע של הדף */
+  /* כוכבים קטנים שנוצרו רק עם גרדיאנטים של CSS */
+  background-image: /* כמה שכבות רקע, כל אחת = כוכב */
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent), /* כוכב לבן קטן */
+    radial-gradient(1px 1px at 70% 80%, #fff, transparent), /* כוכב לבן קטן */
+    radial-gradient(2px 2px at 40% 60%, #b3c7ff, transparent), /* כוכב תכלכל גדול יותר */
+    radial-gradient(1px 1px at 85% 20%, #fff, transparent), /* כוכב לבן קטן */
+    radial-gradient(1px 1px at 10% 90%, #fff, transparent); /* כוכב לבן קטן */
+  background-size: 300px 300px; /* הדפוס חוזר כל 300 פיקסלים - כך יש הרבה כוכבים */
+  animation: stars 60s linear infinite; /* הכוכבים זזים לאט ובאופן קבוע לנצח */
+} /* סוף מצב חלל */
+@keyframes stars { to { background-position: -300px 300px; } } /* האנימציה: מזיזה את הרקע באלכסון בגודל דפוס אחד */
 
-body.space .car,
-body.space .stat { box-shadow: 0 0 14px rgba(124, 77, 255, .35); }
-body.space .plate { border-color: #7c4dff; box-shadow: 0 0 10px var(--plate); }
-body.space .theme-btn { background: #ffb300; color: #000; }
-body.space .history th, body.space .history td { border-bottom-color: rgba(255,255,255,.08); }
+body.space .car, /* כרטיסי רכב במצב חלל */
+body.space .stat { box-shadow: 0 0 14px rgba(124, 77, 255, .35); } /* ...וכרטיסי סטטיסטיקה - זוהר סגול */
+body.space .plate { border-color: #7c4dff; box-shadow: 0 0 10px var(--plate); } /* לוחית עם מסגרת סגולה וזוהר טורקיז */
+body.space .theme-btn { background: #ffb300; color: #000; } /* כפתור החזרה למצב רגיל בצהוב "שמש" */
+body.space .history th, body.space .history td { border-bottom-color: rgba(255,255,255,.08); } /* קווי טבלה בהירים ועדינים */
 
-/* ---- easter egg: hyperspace jump ---- */
-.hyperspace {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  background: repeating-radial-gradient(circle at center, #fff 0 2px, transparent 2px 40px), #000;
-  animation: warp 2.5s ease-in forwards;
-}
-@keyframes warp {
-  0%   { opacity: 0; transform: scale(.2); }
-  30%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(6); }
-}
+/* ---- ביצת פסחא: קפיצה להיפר-חלל ---- */
+.hyperspace { /* שכבת האנימציה */
+  position: fixed; /* קבועה ביחס למסך */
+  inset: 0; /* מכסה את כל המסך (top/right/bottom/left = 0) */
+  z-index: 100; /* מעל כל שאר האלמנטים */
+  pointer-events: none; /* לא חוסמת לחיצות עכבר */
+  background: repeating-radial-gradient(circle at center, #fff 0 2px, transparent 2px 40px), #000; /* טבעות לבנות על רקע שחור = אפקט "מנהרה" */
+  animation: warp 2.5s ease-in forwards; /* אנימציית warp למשך 2.5 שניות, נשארת במצב הסופי */
+} /* סוף hyperspace */
+@keyframes warp { /* האנימציה: התקרבות למנהרה */
+  0%   { opacity: 0; transform: scale(.2); } /* מתחילה שקופה וקטנה */
+  30%  { opacity: 1; } /* נהיית גלויה לגמרי */
+  100% { opacity: 0; transform: scale(6); } /* מסתיימת ענקית ושקופה - כאילו עברנו דרכה */
+} /* סוף warp */
 
-.shake { animation: shake .3s 6; }
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
-}
+.shake { animation: shake .3s 6; } /* רעידה: 0.3 שניות, 6 פעמים */
+@keyframes shake { /* האנימציה: תזוזה ימינה ושמאלה */
+  0%, 100% { transform: translateX(0); } /* מתחילה ומסתיימת במקום */
+  25% { transform: translateX(-6px); } /* 6 פיקסלים שמאלה */
+  75% { transform: translateX(6px); } /* 6 פיקסלים ימינה */
+} /* סוף shake */

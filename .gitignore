@@ -1,17 +1,27 @@
-# environment
+# ---- קבצי סביבה ----
+# קובץ ההגדרות/סודות המקומי - לא עולה ל-git
 .env
 
-# node
+# ---- Node ----
+# תיקיית התלויות ש-npm מתקין - נבנית מחדש עם npm install
 node_modules/
+# קבצי לוג ש-npm יוצר כשיש שגיאה
 npm-debug.log*
 
-# editors / OS
+# ---- עורכי קוד / מערכת הפעלה ----
+# הגדרות של VS Code
 .vscode/
+# הגדרות של JetBrains (WebStorm, IntelliJ וכו')
 .idea/
+# קובץ מערכת של macOS
 .DS_Store
+# קובץ תמונות מוקטנות של Windows
 Thumbs.db
 
-# local redis dumps (real data lives in the docker volume)
+# ---- קבצי Redis מקומיים (המידע האמיתי נשמר ב-volume של Docker) ----
+# קובץ snapshot של Redis
 *.rdb
+# קובץ AOF (יומן כל הכתיבות) של Redis
 *.aof
+# תיקיית ה-AOF בגרסאות החדשות של Redis
 appendonlydir/
