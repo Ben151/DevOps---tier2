@@ -1,0 +1,53 @@
+/* ===== Personal touch: Galactic Parking theme ===== */
+
+.top-actions { display: flex; align-items: center; gap: 1rem; }
+.theme-btn { background: #222a44; }
+
+/* ---- space mode (dark) ---- */
+body.space {
+  --bg: #070b1d;
+  --card: #121a36;
+  --text: #e6ebff;
+  --muted: #8f9bc7;
+  --accent: #7c4dff;
+  --plate: #00e5ff;
+  background-color: var(--bg);
+  /* tiny stars made only with CSS gradients */
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 80%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 60%, #b3c7ff, transparent),
+    radial-gradient(1px 1px at 85% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 10% 90%, #fff, transparent);
+  background-size: 300px 300px;
+  animation: stars 60s linear infinite;
+}
+@keyframes stars { to { background-position: -300px 300px; } }
+
+body.space .car,
+body.space .stat { box-shadow: 0 0 14px rgba(124, 77, 255, .35); }
+body.space .plate { border-color: #7c4dff; box-shadow: 0 0 10px var(--plate); }
+body.space .theme-btn { background: #ffb300; color: #000; }
+body.space .history th, body.space .history td { border-bottom-color: rgba(255,255,255,.08); }
+
+/* ---- easter egg: hyperspace jump ---- */
+.hyperspace {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-radial-gradient(circle at center, #fff 0 2px, transparent 2px 40px), #000;
+  animation: warp 2.5s ease-in forwards;
+}
+@keyframes warp {
+  0%   { opacity: 0; transform: scale(.2); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(6); }
+}
+
+.shake { animation: shake .3s 6; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}

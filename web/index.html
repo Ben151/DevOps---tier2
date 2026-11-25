@@ -5,11 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Parking - לוח בקרה</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fun.css">
 </head>
 <body>
   <header class="topbar">
     <h1 id="title">🅿️ Smart Parking</h1>
-    <span id="conn" class="conn">מתחבר...</span>
+    <div class="top-actions">
+      <button id="theme-btn" class="theme-btn" title="מצב חלל / מצב רגיל">🌌 מצב חלל</button>
+      <span id="conn" class="conn">מתחבר...</span>
+    </div>
   </header>
 
   <!-- shown only when the parking is full -->
@@ -46,6 +50,9 @@
 
   <div id="toast" class="toast hidden"></div>
 
+  <!-- personal touch: space theme, funny messages, easter egg -->
+  <div id="hyperspace" class="hyperspace hidden"></div>
   <script src="app.js"></script>
+  <script src="fun.js"></script>
 </body>
 </html>
