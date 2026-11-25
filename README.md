@@ -158,6 +158,7 @@ REDIS_URL=redis://localhost:6379 npm start
 
 ## 👥 הצוות
 
+## 👥 Team
 בן קרן
 איתי עזימי
 טל קפלן
