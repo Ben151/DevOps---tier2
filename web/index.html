@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Parking - לוח בקרה</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="title">🅿️ Smart Parking</h1>
+    <span id="conn" class="conn">מתחבר...</span>
+  </header>
+
+  <!-- shown only when the parking is full -->
+  <div id="full-alert" class="full-alert hidden">⚠️ החניון מלא! אין כניסה לרכבים נוספים</div>
+
+  <main>
+    <section class="stats">
+      <div class="stat"><span class="label">רכבים בחניון</span><span id="s-occupied" class="value">-</span></div>
+      <div class="stat"><span class="label">מקומות פנויים</span><span id="s-free" class="value">-</span></div>
+      <div class="stat"><span class="label">כניסות סה"כ</span><span id="s-entries" class="value">-</span></div>
+      <div class="stat"><span class="label">הכנסות (₪)</span><span id="s-revenue" class="value">-</span></div>
+    </section>
+
+    <div class="capacity">
+      <div id="capacity-bar" class="capacity-bar"></div>
+    </div>
+    <p id="pricing" class="pricing"></p>
+
+    <!-- manual entry = simulates the IoT camera POST request -->
+    <form id="manual-form" class="manual-form">
+      <input id="plate-input" placeholder="מספר רישוי, לדוגמה 12-345-67" autocomplete="off">
+      <button type="submit">📷 סימולציית מצלמה</button>
+    </form>
+
+    <h2>רכבים בחניון</h2>
+    <div id="cars" class="cars"></div>
+
+    <h2>יצאו לאחרונה</h2>
+    <table class="history">
+      <thead><tr><th>רישוי</th><th>זמן חניה</th><th>שולם</th><th>שעת יציאה</th></tr></thead>
+      <tbody id="history"></tbody>
+    </table>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
