@@ -1,0 +1,57 @@
+# Smart Parking - microservices environment
+#   web   -> Nginx: dashboard (HTML/CSS/JS) + reverse proxy to the API  (the only port open to the host)
+#   api   -> Node.js + Express: POST from the camera, GET for the dashboard
+#   redis -> database, persisted to a named volume (AOF file)
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: parking-redis
+    # --appendonly yes       -> every write is appended to a file (AOF) inside /data
+    # --appendfsync everysec -> flush the file to disk every second
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks: [backend]
+
+  api:
+    build: ./api
+    image: smart-parking-api:local
+    container_name: parking-api
+    environment:
+      PORT: 3000
+      REDIS_URL: redis://redis:6379          # "redis" = service name -> Docker internal DNS
+      PARKING_CAPACITY: ${PARKING_CAPACITY:-10}
+      PRICE_FIRST_HOUR: ${PRICE_FIRST_HOUR:-12}
+      PRICE_EXTRA_HOUR: ${PRICE_EXTRA_HOUR:-8}
+      FREE_MINUTES: ${FREE_MINUTES:-15}
+    depends_on:
+      redis:
+        condition: service_healthy           # wait until redis answers PING
+    restart: unless-stopped
+    networks: [backend, frontend]
+
+  web:
+    build: ./web
+    image: smart-parking-web:local
+    container_name: parking-web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [frontend]
+
+volumes:
+  redis-data:        # named volume - survives "docker compose down" (but not "down -v")
+
+networks:
+  frontend:          # web <-> api
+  backend:           # api <-> redis (web cannot reach redis directly)
