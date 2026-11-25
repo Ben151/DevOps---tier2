@@ -158,9 +158,9 @@ REDIS_URL=redis://localhost:6379 npm start
 
 ## 👥 הצוות
 
-| שם | אחריות עיקרית |
-|---|---|
-| <שם 1> | Backend (Node.js API + Redis), Docker Compose, GHCR |
-| <שם 2> | Frontend (Dashboard + Nginx), הטאץ' האישי, CI, תיעוד |
+בן קרן
+איתי עזימי
+טל קפלן
+איידל סרבטר
 
 תיעוד שימוש ב-AI: [AI_USAGE.md](AI_USAGE.md)
