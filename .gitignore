@@ -1,0 +1,17 @@
+# environment
+.env
+
+# node
+node_modules/
+npm-debug.log*
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# local redis dumps (real data lives in the docker volume)
+*.rdb
+*.aof
+appendonlydir/
